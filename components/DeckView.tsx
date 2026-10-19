@@ -3,8 +3,12 @@
 import { useState } from "react";
 import { STACK, cardLabel } from "@/lib/stack";
 import PlayingCard from "./PlayingCard";
+import DealDeck from "./DealDeck";
+
+type SubMode = "deal" | "list";
 
 export default function DeckView() {
+  const [subMode, setSubMode] = useState<SubMode>("deal");
   const [revealed, setRevealed] = useState<Set<number>>(new Set());
 
   function toggle(i: number) {
@@ -20,6 +24,25 @@ export default function DeckView() {
 
   return (
     <div className="deck-wrap">
+      <div className="submodes">
+        <button
+          className={`submode-btn ${subMode === "deal" ? "active" : ""}`}
+          onClick={() => setSubMode("deal")}
+        >
+          Deal
+        </button>
+        <button
+          className={`submode-btn ${subMode === "list" ? "active" : ""}`}
+          onClick={() => setSubMode("list")}
+        >
+          List
+        </button>
+      </div>
+
+      {subMode === "deal" ? (
+        <DealDeck />
+      ) : (
+        <>
       <div className="deck-head">
         <p className="deck-note">
           Tap a card to flip it face up. {STACK.length} cards, in Mnemonica
@@ -73,6 +96,8 @@ export default function DeckView() {
           );
         })}
       </ol>
+        </>
+      )}
     </div>
   );
 }
