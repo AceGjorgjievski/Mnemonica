@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import AmbientBackground from "@/components/AmbientBackground";
 
 export const metadata: Metadata = {
   title: "Mnemonica Trainer",
@@ -20,7 +21,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <AmbientBackground />
+        {children}
+      </body>
     </html>
   );
 }
