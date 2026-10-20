@@ -44,18 +44,32 @@ function Pips({ card }: { card: Card }) {
   );
 }
 
+// Fixed sparkle positions (% of the wrapper) so SSR stays deterministic.
+const SPARKS = [
+  { top: "-6%", left: "8%", d: 0 },
+  { top: "10%", left: "104%", d: 0.5 },
+  { top: "58%", left: "-8%", d: 0.9 },
+  { top: "96%", left: "88%", d: 0.3 },
+  { top: "102%", left: "24%", d: 1.2 },
+  { top: "40%", left: "102%", d: 0.7 },
+];
+
 export default function PlayingCard({
   card,
   size = "lg",
+  glow = false,
 }: {
   card: Card;
   size?: "lg" | "sm";
+  // When true, wrap the card in a pulsing light halo, a one-shot shine sweep,
+  // and a twinkle of sparkles — used for the big cards on the practice stage.
+  glow?: boolean;
 }) {
   const colorClass = isRed(card.suit) ? "pc-red" : "pc-black";
   const symbol = SUIT_SYMBOL[card.suit];
   const isCourt = COURT.has(card.rank);
 
-  return (
+  const cardEl = (
     <div
       className={`pcard pcard-${size} ${colorClass}`}
       aria-label={cardLabel(card)}
@@ -80,6 +94,30 @@ export default function PlayingCard({
         <span className="pc-rank">{card.rank}</span>
         <span className="pc-csuit">{symbol}</span>
       </div>
+
+      {glow && <span className="pc-shine" aria-hidden="true" />}
+    </div>
+  );
+
+  if (!glow) return cardEl;
+
+  return (
+    <div
+      // `key` on the suit+rank so React remounts the wrapper each new card,
+      // replaying the shine sweep and sparkle burst every reveal.
+      key={`${card.rank}${card.suit}`}
+      className={`pc-glowwrap ${colorClass}`}
+    >
+      <span className="pc-halo" aria-hidden="true" />
+      {cardEl}
+      {SPARKS.map((s, i) => (
+        <span
+          key={i}
+          className="pc-spark"
+          aria-hidden="true"
+          style={{ top: s.top, left: s.left, animationDelay: `${s.d}s` }}
+        />
+      ))}
     </div>
   );
 }

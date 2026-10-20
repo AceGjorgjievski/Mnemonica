@@ -161,7 +161,7 @@ export default function Home() {
             </div>
             {revealed ? (
               <div className="reveal">
-                <PlayingCard card={card} />
+                <PlayingCard card={card} glow />
                 <div className={`answer ${isRed(card.suit) ? "red" : ""}`}>
                   {cardLabel(card)}
                 </div>
@@ -173,7 +173,7 @@ export default function Home() {
         ) : (
           <>
             <div className="prompt-label">Card</div>
-            <PlayingCard card={card} />
+            <PlayingCard card={card} glow />
             {revealed ? (
               <div className="answer">
                 Position <b>{round.current}</b>

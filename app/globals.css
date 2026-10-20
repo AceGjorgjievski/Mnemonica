@@ -558,6 +558,132 @@ button {
   line-height: 1;
 }
 
+/* Card light show — halo, shine sweep and sparkles around a highlighted card. */
+.pc-glowwrap {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  --glow: #5b8cff;
+}
+
+.pc-glowwrap.pc-red {
+  --glow: #ff5d6c;
+}
+
+.pc-halo {
+  position: absolute;
+  inset: -34%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--glow) 55%, transparent) 0%,
+    color-mix(in srgb, var(--glow) 18%, transparent) 42%,
+    transparent 70%
+  );
+  filter: blur(14px);
+  animation: pcHalo 3.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Diagonal light bar that sweeps across the card face, then waits. */
+.pc-shine {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.pc-shine::before {
+  content: "";
+  position: absolute;
+  top: -60%;
+  left: -75%;
+  width: 55%;
+  height: 220%;
+  transform: rotate(18deg);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.85) 50%,
+    transparent 100%
+  );
+  filter: blur(3px);
+  animation: pcShine 4.6s ease-in-out 0.25s infinite;
+}
+
+.pc-spark {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  background: #fff;
+  box-shadow: 0 0 8px 2px var(--glow);
+  clip-path: polygon(
+    50% 0%,
+    61% 39%,
+    100% 50%,
+    61% 61%,
+    50% 100%,
+    39% 61%,
+    0% 50%,
+    39% 39%
+  );
+  opacity: 0;
+  pointer-events: none;
+  animation: pcSpark 2.6s ease-in-out infinite;
+}
+
+@keyframes pcHalo {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes pcShine {
+  0% {
+    left: -75%;
+  }
+  22%,
+  100% {
+    left: 160%;
+  }
+}
+
+@keyframes pcSpark {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.2) rotate(0deg);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1) rotate(90deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pc-halo,
+  .pc-shine::before,
+  .pc-spark {
+    animation: none;
+  }
+  .pc-shine::before {
+    display: none;
+  }
+  .pc-spark {
+    opacity: 0.8;
+  }
+}
+
 /* Reveal answer */
 .answer {
   min-height: 2.2rem;
