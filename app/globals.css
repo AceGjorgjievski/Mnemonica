@@ -290,6 +290,14 @@ button {
   padding: 6px 0;
 }
 
+/* Wider screens use larger reveal/prompt cards, so reserve more stage height to
+   match — otherwise revealing grows the stage and pushes the buttons down. */
+@media (min-width: 600px) {
+  .stage {
+    min-height: 400px;
+  }
+}
+
 .prompt-label {
   font-size: 0.85rem;
   text-transform: uppercase;
