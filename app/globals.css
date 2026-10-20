@@ -716,8 +716,10 @@ button {
   position: sticky;
   bottom: 0;
   z-index: 5;
-  background: var(--bg);
-  padding-top: 12px;
+  /* No fill: let the animated backdrop show through behind every button. The
+     buttons carry their own fills, so they stay legible. */
+  background: transparent;
+  padding-top: 14px;
   padding-bottom: calc(8px + env(safe-area-inset-bottom));
 }
 
