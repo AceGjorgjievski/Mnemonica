@@ -200,12 +200,14 @@ export default function Home() {
             </button>
           </div>
         )}
-        <button className="btn secondary" onClick={next}>
-          Skip
-        </button>
-        <button className="btn ghost" onClick={() => setShowStack(true)}>
-          View full stack
-        </button>
+        <div className="controls-row">
+          <button className="btn secondary" onClick={next}>
+            Skip
+          </button>
+          <button className="btn ghost" onClick={() => setShowStack(true)}>
+            View full stack
+          </button>
+        </div>
       </div>
         </>
       )}
