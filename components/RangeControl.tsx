@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { STACK } from "@/lib/stack";
 
 const N = STACK.length;
@@ -26,74 +29,95 @@ export default function RangeControl({
   roundIndex: number;
   roundSize: number;
 }) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <div className="range">
-      <div className="range-top">
+    <div className={`range ${open ? "open" : ""}`}>
+      <button
+        className="range-toggle"
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+      >
         <span className="range-title">Range</span>
         <span className="range-current">
-          {start}–{end} · {end - start + 1} cards
+          {start}–{end}
         </span>
-      </div>
+        <span className="range-prog">
+          {roundIndex}/{roundSize}
+        </span>
+        <span className="range-chevron" aria-hidden="true">
+          ▾
+        </span>
+      </button>
 
-      <div className="range-presets">
-        {PRESETS.map((p) => (
-          <button
-            key={p.label}
-            className={`chip ${start === p.s && end === p.e ? "active" : ""}`}
-            onClick={() => onChange(p.s, p.e)}
-          >
-            {p.label}
-          </button>
-        ))}
-      </div>
+      {open && (
+        <div className="range-body">
+          <div className="range-presets">
+            {PRESETS.map((p) => (
+              <button
+                key={p.label}
+                className={`chip ${
+                  start === p.s && end === p.e ? "active" : ""
+                }`}
+                onClick={() => {
+                  onChange(p.s, p.e);
+                  setOpen(false);
+                }}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
 
-      <div className="range-steppers">
-        <div className="stepper">
-          <span className="stepper-label">From</span>
-          <button
-            className="stepper-btn"
-            aria-label="Decrease start"
-            onClick={() => onChange(clamp(start - 1, 1, end), end)}
-            disabled={start <= 1}
-          >
-            −
-          </button>
-          <span className="stepper-val">{start}</span>
-          <button
-            className="stepper-btn"
-            aria-label="Increase start"
-            onClick={() => onChange(clamp(start + 1, 1, end), end)}
-            disabled={start >= end}
-          >
-            +
-          </button>
+          <div className="range-steppers">
+            <div className="stepper">
+              <span className="stepper-label">From</span>
+              <button
+                className="stepper-btn"
+                aria-label="Decrease start"
+                onClick={() => onChange(clamp(start - 1, 1, end), end)}
+                disabled={start <= 1}
+              >
+                −
+              </button>
+              <span className="stepper-val">{start}</span>
+              <button
+                className="stepper-btn"
+                aria-label="Increase start"
+                onClick={() => onChange(clamp(start + 1, 1, end), end)}
+                disabled={start >= end}
+              >
+                +
+              </button>
+            </div>
+
+            <div className="stepper">
+              <span className="stepper-label">To</span>
+              <button
+                className="stepper-btn"
+                aria-label="Decrease end"
+                onClick={() => onChange(start, clamp(end - 1, start, N))}
+                disabled={end <= start}
+              >
+                −
+              </button>
+              <span className="stepper-val">{end}</span>
+              <button
+                className="stepper-btn"
+                aria-label="Increase end"
+                onClick={() => onChange(start, clamp(end + 1, start, N))}
+                disabled={end >= N}
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          <div className="range-note">
+            {end - start + 1} cards · no repeats until the round resets
+          </div>
         </div>
-
-        <div className="stepper">
-          <span className="stepper-label">To</span>
-          <button
-            className="stepper-btn"
-            aria-label="Decrease end"
-            onClick={() => onChange(start, clamp(end - 1, start, N))}
-            disabled={end <= start}
-          >
-            −
-          </button>
-          <span className="stepper-val">{end}</span>
-          <button
-            className="stepper-btn"
-            aria-label="Increase end"
-            onClick={() => onChange(start, clamp(end + 1, start, N))}
-            disabled={end >= N}
-          >
-            +
-          </button>
-        </div>
-      </div>
-
-      <div className="range-progress">
-        {roundIndex} / {roundSize} this round · no repeats
-      </div>
+      )}
     </div>
   );
 }

@@ -126,23 +126,24 @@ button {
   color: var(--accent-contrast);
 }
 
-/* Range control */
+/* Range control (collapsible) */
 .range {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 14px;
-  padding: 10px 12px;
   margin-bottom: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
 }
 
-.range-top {
+.range-toggle {
+  width: 100%;
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  align-items: center;
   gap: 10px;
+  background: none;
+  border: none;
+  color: var(--text);
+  padding: 12px 14px;
+  text-align: left;
 }
 
 .range-title {
@@ -154,9 +155,39 @@ button {
 }
 
 .range-current {
-  font-size: 0.9rem;
-  font-weight: 700;
+  font-size: 0.95rem;
+  font-weight: 800;
   font-variant-numeric: tabular-nums;
+}
+
+.range-prog {
+  margin-left: auto;
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.range-chevron {
+  color: var(--muted);
+  font-size: 0.9rem;
+  transition: transform 0.18s ease;
+}
+
+.range.open .range-chevron {
+  transform: rotate(180deg);
+}
+
+.range-body {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 2px 12px 12px;
+}
+
+.range-note {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-align: center;
 }
 
 .range-presets {
@@ -290,7 +321,7 @@ button {
 }
 
 .pcard-lg {
-  --w: min(150px, 44vw);
+  --w: min(168px, 48vw);
 }
 
 @media (min-width: 600px) {
@@ -458,7 +489,7 @@ button {
 /* Keep the reveal card compact so the card + its name fit above the pinned
    controls on phones. */
 .reveal .pcard {
-  --w: min(108px, 32vw);
+  --w: min(126px, 37vw);
 }
 
 @media (min-width: 600px) {
